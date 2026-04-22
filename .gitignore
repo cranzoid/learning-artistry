@@ -1,0 +1,33 @@
+# Mac
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+dist/
+
+# Laravel
+vendor/
+.env
+.env.*
+!.env.example
+storage/*.key
+bootstrap/cache/*.php
+
+# Logs
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# Misc
+coverage/
+graphify-out/

@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql -u root -proot123 learning_artistry -e \"SHOW TABLES;\")",
+      "Bash(php artisan *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('version','not found'\\), d.get\\('description',''\\)\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); pkgs=[p for p in d['packages'] if p['name']=='filament/filament']; print\\(pkgs[0]['version'] if pkgs else 'not found'\\)\")",
+      "Bash(curl -s http://localhost:8001/api/v1/courses)",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s http://localhost:8001/api/v1/courses/ui-ux-design-masterclass)",
+      "Bash(pkill -f \"artisan serve\")",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/courses)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/courses/nonexistent-slug)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/api/courses?per_page=3\")",
+      "Bash(curl -sv \"http://127.0.0.1:8000/api/courses?per_page=3\")",
+      "Bash(lsof -nP -iTCP -sTCP:LISTEN)",
+      "Bash(mysql -u root -proot123 learning_artistry -e \"SELECT COUNT\\(*\\) as total, status FROM courses GROUP BY status; SELECT COUNT\\(*\\) as published_count FROM courses WHERE status='published';\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/api/courses/aws-solution-architect-training-and-certification\")",
+      "Bash(curl -s \"http://127.0.0.1:8000/api/categories\")",
+      "Bash(echo \"Started Next.js in background \\(PID: $!\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/courses)",
+      "Bash(curl -s http://localhost:3001/courses)",
+      "Bash(python3 -c ' *)",
+      "Bash(pkill -f \"php artisan serve\")",
+      "Bash(php /Users/cranzoid/the-learning-artistry/backend/artisan migrate:status)",
+      "Bash(curl -sS -o /dev/null -w \"home:%{http_code} \" http://localhost:3000/)",
+      "Bash(curl -sS -o /dev/null -w \"courses:%{http_code} \" http://localhost:3000/courses)",
+      "Bash(curl -sS -o /dev/null -w \"contact:%{http_code} \" http://localhost:3000/contact)",
+      "Bash(curl -sS -o /dev/null -w \"about:%{http_code} \" http://localhost:3000/about)",
+      "Bash(curl -sS -o /dev/null -w \"corp:%{http_code}\\\\n\" http://localhost:3000/corporate-training)",
+      "Bash(kill bl03wny7y *)",
+      "Bash(curl -sS -o /dev/null -w '%{http_code}' http://localhost:3000__TRACKED_VAR__)"
+    ]
+  }
+}
