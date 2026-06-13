@@ -31,11 +31,11 @@ export default function HomeHero({ featured }: Props) {
 
   useEffect(() => {
     if (items.length < 2) return undefined;
-    const id = window.setInterval(() => {
+    const id = window.setTimeout(() => {
       setActive((current) => (current + 1) % items.length);
     }, 5000);
-    return () => window.clearInterval(id);
-  }, [items]);
+    return () => window.clearTimeout(id);
+  }, [items, active]);
 
   const current = items[active];
   const stageTitle = current ? current.title.split(' —')[0] : FALLBACK_STAGE.title;

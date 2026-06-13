@@ -580,11 +580,21 @@ img, svg {
 }
 
 .hero-e-dots button {
+  position: relative;
   width: 18px;
   height: 3px;
   border-radius: 999px;
   background: var(--color-line-2);
+  cursor: pointer;
   transition: background 0.2s ease, width 0.2s ease;
+}
+
+/* Invisible, larger hit area so the 3px-tall line is tappable on touch
+   devices — does not change how the dot looks on desktop or mobile. */
+.hero-e-dots button::before {
+  content: '';
+  position: absolute;
+  inset: -14px -6px;
 }
 
 .hero-e-dots button.active {
@@ -618,7 +628,7 @@ img, svg {
     aspect-ratio: 16 / 11;
   }
   .hero-e-card {
-    position: static;
+    position: relative;
     width: 100%;
     margin-top: -3rem;
     margin-left: auto;
