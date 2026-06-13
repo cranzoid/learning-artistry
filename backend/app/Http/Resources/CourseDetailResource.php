@@ -10,7 +10,7 @@ class CourseDetailResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $showPrice = $this->show_price ?? true;
+        $showPrice = $this->show_price ?? false;
 
         return [
             'id'                => $this->id,

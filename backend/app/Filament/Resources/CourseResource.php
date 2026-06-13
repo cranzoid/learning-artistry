@@ -112,30 +112,32 @@ class CourseResource extends Resource
                 ->schema([
                     Toggle::make('show_price')
                         ->label('Show Price Publicly')
-                        ->default(true)
-                        ->helperText('Turn this off to show "Enquire now" on the website while keeping the saved pricing for later.'),
+                        ->default(false)
+                        ->helperText('Off by default — the website shows "Enquire now" while the saved pricing is kept for later. Turn this on to display the price publicly.'),
 
                     TextInput::make('price')
+                        ->label('Selling Price')
                         ->numeric()
-                        ->prefix('₹')
-                        ->minValue(0)
-                        ->placeholder('0.00'),
-
-                    TextInput::make('discounted_price')
-                        ->label('Discounted Price')
-                        ->numeric()
-                        ->prefix('₹')
+                        ->prefix('$')
                         ->minValue(0)
                         ->placeholder('0.00')
-                        ->helperText('Leave blank if no discount.'),
+                        ->helperText('What learners actually pay — shown as the main price on the website.'),
+
+                    TextInput::make('discounted_price')
+                        ->label('Original Price (compare-at)')
+                        ->numeric()
+                        ->prefix('$')
+                        ->minValue(0)
+                        ->placeholder('0.00')
+                        ->helperText('Optional. Shown struck through next to the selling price. Must be HIGHER than the selling price, or it won\'t display.'),
 
                     Select::make('currency')
                         ->options([
-                            'INR' => 'INR — Indian Rupee',
                             'USD' => 'USD — US Dollar',
+                            'INR' => 'INR — Indian Rupee',
                             'EUR' => 'EUR — Euro',
                         ])
-                        ->default('INR')
+                        ->default('USD')
                         ->required(),
 
                     TextInput::make('razorpay_link')

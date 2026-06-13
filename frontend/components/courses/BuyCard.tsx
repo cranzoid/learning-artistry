@@ -11,6 +11,7 @@ interface Props {
   categoryLabel?: string;
   price?: number;
   compare?: number;
+  currency: string;
   razorpay_link?: string;
   showPrice: boolean;
   duration: string;
@@ -30,6 +31,7 @@ export default function BuyCard({
   categoryLabel,
   price,
   compare,
+  currency,
   razorpay_link,
   showPrice,
   duration,
@@ -66,7 +68,7 @@ export default function BuyCard({
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 100% 0%, rgba(74,58,255,0.08) 0%, transparent 44%)',
+          background: 'radial-gradient(circle at 100% 0%, rgba(109,58,255,0.10) 0%, transparent 44%)',
           pointerEvents: 'none',
         }}
       />
@@ -159,12 +161,12 @@ export default function BuyCard({
                 className="serif"
                 style={{
                   fontSize: 'clamp(2.6rem, 4vw, 3.35rem)',
-                  letterSpacing: '-0.03em',
+                  letterSpacing: '-0.02em',
                   lineHeight: 1,
                   color: 'var(--color-ink)',
                 }}
               >
-                {fmtPrice(price)}
+                {fmtPrice(price, currency)}
               </span>
               {compare && saved > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, paddingBottom: 4 }}>
@@ -176,7 +178,7 @@ export default function BuyCard({
                       textDecoration: 'line-through',
                     }}
                   >
-                    {fmtPrice(compare)}
+                    {fmtPrice(compare, currency)}
                   </span>
                   <span className="chip chip-accent">Save {saved}%</span>
                 </div>
@@ -188,7 +190,7 @@ export default function BuyCard({
                 className="serif"
                 style={{
                   fontSize: 'clamp(2rem, 3vw, 2.5rem)',
-                  letterSpacing: '-0.03em',
+                  letterSpacing: '-0.02em',
                   lineHeight: 1.02,
                   color: 'var(--color-ink)',
                 }}
@@ -230,7 +232,7 @@ export default function BuyCard({
               style={{
                 width: `${progress}%`,
                 height: '100%',
-                background: 'linear-gradient(90deg, #4A3AFF 0%, #8AA1FF 100%)',
+                background: 'var(--gradient-brand)',
                 borderRadius: 999,
               }}
             />
@@ -315,15 +317,12 @@ export default function BuyCard({
             href={checkoutUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-ink btn-lg"
+            className="btn btn-primary btn-lg"
             style={{
               width: '100%',
               justifyContent: 'center',
               fontSize: 16,
               padding: '16px 20px',
-              background: 'var(--color-ink)',
-              color: 'var(--color-bg)',
-              borderColor: 'var(--color-ink)',
             }}
           >
             Reserve my seat <ArrowIcon />
@@ -331,15 +330,12 @@ export default function BuyCard({
         ) : (
           <Link
             href="/contact"
-            className="btn btn-ink btn-lg"
+            className="btn btn-primary btn-lg"
             style={{
               width: '100%',
               justifyContent: 'center',
               fontSize: 16,
               padding: '16px 20px',
-              background: 'var(--color-ink)',
-              color: 'var(--color-bg)',
-              borderColor: 'var(--color-ink)',
             }}
           >
             {hasVisiblePrice ? 'Enquire to enrol' : 'Enquire now'} <ArrowIcon />
@@ -389,9 +385,9 @@ export default function BuyCard({
           {(
             hasVisiblePrice
               ? [
-                  'Exam voucher included on certification tracks',
-                  'Pass guarantee with guided retake support',
-                  'Corporate invoicing and team discounts for 3+',
+                  'Live, instructor-led sessions',
+                  'Course materials and recordings included',
+                  'Corporate invoicing available for teams',
                 ]
               : [
                   'Get current pricing and upcoming cohort options',

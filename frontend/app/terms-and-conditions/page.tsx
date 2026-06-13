@@ -74,7 +74,7 @@ const sections = [
 export default function TermsAndConditionsPage() {
   return (
     <LegalPageShell
-      eyebrow="§ Terms"
+      eyebrow="Terms"
       title="Terms & Conditions"
       lead="These terms explain how the website, enquiries, purchases, and learning services of The Learning Artistry are intended to work."
       effectiveDate="April 22, 2026"

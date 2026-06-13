@@ -67,7 +67,7 @@ const sections = [
 export default function PrivacyPolicyPage() {
   return (
     <LegalPageShell
-      eyebrow="§ Privacy"
+      eyebrow="Privacy"
       title="Privacy Policy"
       lead="This page explains what information The Learning Artistry may collect, how it is used, and how you can contact us about privacy-related questions."
       effectiveDate="April 22, 2026"

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('courses', function (Blueprint $table) {
             if (! Schema::hasColumn('courses', 'show_price')) {
-                $table->boolean('show_price')->default(true)->after('currency');
+                $table->boolean('show_price')->default(false)->after('currency');
             }
         });
     }

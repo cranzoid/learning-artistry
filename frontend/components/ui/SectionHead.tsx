@@ -23,11 +23,8 @@ export default function SectionHead({
 
   if (isSplit) {
     return (
-      <div
-        className="grid gap-6 md:gap-14 md:items-end"
-        style={{ gridTemplateColumns: 'minmax(0,1.2fr) minmax(0,1fr)' }}
-      >
-        <div style={{ gridColumn: '1 / -1' }}>
+      <div className="sh-split">
+        <div className="sh-split-full">
           <div className="pb-5 border-b border-[var(--color-line)]">
             <Eyebrow label={eyebrow} index={index} />
           </div>
@@ -41,6 +38,21 @@ export default function SectionHead({
           )}
           {action && <div>{action}</div>}
         </div>
+        <style>{`
+          .sh-split {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          .sh-split-full { grid-column: 1 / -1; }
+          @media (min-width: 768px) {
+            .sh-split {
+              grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+              gap: 3.5rem;
+              align-items: end;
+            }
+          }
+        `}</style>
       </div>
     );
   }

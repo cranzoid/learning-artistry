@@ -2,12 +2,12 @@ import type { Course, Category, PaginatedCourses, ApiMeta } from '@/types';
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000/api';
 const CATEGORY_COLORS: Record<string, string> = {
-  cloud: '#4A3AFF',
-  data: '#1769AA',
-  dev: '#C24A2E',
-  marketing: '#B86B2B',
-  pm: '#0E77D6',
-  quality: '#2E7D32',
+  cloud: '#3E5497',
+  data: '#5E4791',
+  dev: '#9C4F2E',
+  marketing: '#A87427',
+  pm: '#2F6B8F',
+  quality: '#3D7252',
 };
 
 async function get<T>(path: string, opts?: RequestInit): Promise<T> {
@@ -69,10 +69,6 @@ interface RawCategory {
   courses_count?: number;
 }
 
-function hashString(value: string): number {
-  return value.split('').reduce((acc, char) => ((acc * 31) + char.charCodeAt(0)) >>> 0, 7);
-}
-
 function deriveCourseCode(raw: RawCourse): string {
   const acronym = raw.title
     .replace(/[^A-Za-z0-9& ]+/g, ' ')
@@ -89,8 +85,6 @@ function deriveCourseCode(raw: RawCourse): string {
 // ─── Normalization ────────────────────────────────────────────────────────────
 
 function normalize(raw: RawCourse): Course {
-  const hash = hashString(raw.slug);
-
   return {
     slug: raw.slug,
     code: deriveCourseCode(raw),
@@ -105,13 +99,12 @@ function normalize(raw: RawCourse): Course {
     cert: raw.certification_info ?? undefined,
     price: raw.pricing?.price ?? undefined,
     compare: raw.pricing?.discounted_price ?? undefined,
-    showPrice: raw.pricing?.show_price ?? true,
+    currency: raw.pricing?.currency || 'INR',
+    showPrice: raw.pricing?.show_price ?? false,
     razorpay_link: raw.pricing?.razorpay_link ?? undefined,
     thumbnail: raw.thumbnail_url ?? undefined,
     banner: raw.banner_url ?? undefined,
     featured: raw.featured,
-    cohorts: 180 + (hash % 620),
-    rating: Number((4.7 + ((hash % 25) / 100)).toFixed(1)),
     color: raw.category?.slug ? CATEGORY_COLORS[raw.category.slug] : undefined,
     highlights: raw.highlights ?? undefined,
     outcomes: raw.learning_outcomes ?? undefined,
@@ -121,6 +114,9 @@ function normalize(raw: RawCourse): Course {
       description: m.description,
     })),
     faq: raw.faqs?.map((f) => ({ q: f.question, a: f.answer })),
+    seo: raw.seo
+      ? { metaTitle: raw.seo.meta_title, metaDescription: raw.seo.meta_description }
+      : undefined,
   };
 }
 
@@ -208,8 +204,8 @@ export async function getCategories(): Promise<Category[]> {
   }
 }
 
-export function fmtPrice(n: number, currency = 'USD'): string {
-  return new Intl.NumberFormat('en-US', {
+export function fmtPrice(n: number, currency = 'INR'): string {
+  return new Intl.NumberFormat(currency === 'INR' ? 'en-IN' : 'en-US', {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,

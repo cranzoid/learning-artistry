@@ -21,9 +21,8 @@ export interface Course {
   cert?: string;
   price?: number;
   compare?: number;
+  currency: string;
   showPrice: boolean;
-  cohorts?: number;
-  rating?: number;
   color?: string;
   featured?: boolean;
   highlights?: string[];
@@ -35,6 +34,7 @@ export interface Course {
   thumbnail?: string;
   banner?: string;
   full_description?: string;
+  seo?: { metaTitle?: string; metaDescription?: string };
 }
 
 export interface Category {

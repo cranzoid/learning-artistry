@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getCourse, getCoursesPaginated, fmtPrice } from '@/lib/api';
 import Eyebrow from '@/components/ui/Eyebrow';
@@ -20,8 +21,16 @@ function getEnrollmentMeta(slug: string) {
   const cohortSize = 20;
   const seatsLeft = 4 + (hash % 5);
   const seatsReserved = cohortSize - seatsLeft;
-  const startOffsets = [13, 20, 27];
-  const nextStartDate = new Date(Date.UTC(2026, 4, startOffsets[hash % startOffsets.length]));
+
+  // Next cohort: the Monday 1–3 weeks out, stable per course, never in the past.
+  const now = new Date();
+  const daysUntilMonday = ((8 - now.getUTCDay()) % 7) || 7;
+  const extraWeeks = hash % 3;
+  const nextStartDate = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + daysUntilMonday + extraWeeks * 7,
+  ));
   const nextStart = new Intl.DateTimeFormat('en-IN', {
     weekday: 'short',
     day: '2-digit',
@@ -51,9 +60,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const course = await getCourse(slug);
   if (!course) return { title: 'Course Not Found — The Learning Artistry' };
+
+  const title = course.seo?.metaTitle || course.title;
+  const description = course.seo?.metaDescription || course.short;
+  const image = course.banner ?? course.thumbnail;
+
   return {
-    title: `${course.title} — The Learning Artistry`,
-    description: course.short,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      ...(image ? { images: [{ url: image }] } : {}),
+    },
   };
 }
 
@@ -62,42 +82,7 @@ export default async function CourseDetailPage({ params }: Props) {
   const course = await getCourse(slug);
 
   if (!course) {
-    return (
-      <div
-        style={{
-          minHeight: '60vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 24,
-          textAlign: 'center',
-          padding: '4rem 2rem',
-        }}
-      >
-        <span className="mono" style={{ fontSize: 11, color: 'var(--color-ink-5)' }}>
-          404
-        </span>
-        <h1
-          className="serif"
-          style={{
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            fontWeight: 400,
-            lineHeight: 0.96,
-            letterSpacing: '-0.035em',
-          }}
-        >
-          Course not<br />
-          <span className="italic">found.</span>
-        </h1>
-        <p className="lead" style={{ maxWidth: '40ch' }}>
-          That program may have moved, been retired, or the link might be wrong.
-        </p>
-        <Link href="/courses" className="btn btn-primary btn-lg">
-          Browse catalog <ArrowIcon />
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const displayPrice = typeof course.price === 'number' ? course.price : undefined;
@@ -189,10 +174,10 @@ export default async function CourseDetailPage({ params }: Props) {
               <h1
                 className="serif"
                 style={{
-                  fontSize: 'clamp(2.75rem, 6vw, 5.25rem)',
-                  fontWeight: 400,
-                  lineHeight: 0.96,
-                  letterSpacing: '-0.03em',
+                  fontSize: 'clamp(2.25rem, 4.5vw, 4rem)',
+                  fontWeight: 540,
+                  lineHeight: 1.04,
+                  letterSpacing: '-0.02em',
                   maxWidth: '16ch',
                 }}
               >
@@ -265,9 +250,9 @@ export default async function CourseDetailPage({ params }: Props) {
                     <>
                       <span
                         className="serif"
-                        style={{ fontSize: '2.5rem', letterSpacing: '-0.03em', lineHeight: 1 }}
+                        style={{ fontSize: '2.5rem', letterSpacing: '-0.02em', lineHeight: 1 }}
                       >
-                        {fmtPrice(displayPrice)}
+                        {fmtPrice(displayPrice, course.currency)}
                       </span>
                       {course.compare && saved > 0 && (
                         <span
@@ -278,14 +263,14 @@ export default async function CourseDetailPage({ params }: Props) {
                             textDecoration: 'line-through',
                           }}
                         >
-                      {fmtPrice(course.compare)}
+                      {fmtPrice(course.compare, course.currency)}
                         </span>
                       )}
                     </>
                   ) : (
                     <span
                       className="serif"
-                      style={{ fontSize: '2rem', letterSpacing: '-0.03em', lineHeight: 1.08 }}
+                      style={{ fontSize: '2rem', letterSpacing: '-0.02em', lineHeight: 1.08 }}
                     >
                       Enquire now
                     </span>
@@ -430,6 +415,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 categoryLabel={course.catLabel}
                 price={course.price}
                 compare={course.compare}
+                currency={course.currency}
                 razorpay_link={course.razorpay_link}
                 showPrice={showPrice}
                 duration={course.duration}
@@ -458,7 +444,7 @@ export default async function CourseDetailPage({ params }: Props) {
         `}</style>
       </section>
 
-      {/* ── Social proof strip ── */}
+      {/* ── Format strip ── */}
       <section
         style={{
           padding: '28px 0',
@@ -476,21 +462,20 @@ export default async function CourseDetailPage({ params }: Props) {
               justifyContent: 'center',
             }}
           >
-            <span className="serif" style={{ fontSize: 15, color: 'var(--color-ink-3)' }}>
-              Engineers from
-            </span>
-            {['NORTHWIND', 'Meridian', 'QUANTA', 'Halcyon', 'VOYAGER', 'Helix'].map((n) => (
+            {[
+              'Live, instructor-led sessions',
+              `${cohortSize}-seat cohorts`,
+              'Materials & recordings included',
+              'Individual & team enrolment',
+            ].map((n) => (
               <span
                 key={n}
-                className="serif"
-                style={{ fontSize: 18, color: 'var(--color-ink-3)', letterSpacing: '-0.01em' }}
+                className="mono"
+                style={{ fontSize: 11, color: 'var(--color-ink-3)', letterSpacing: '0.05em', textTransform: 'uppercase' }}
               >
                 {n}
               </span>
             ))}
-            <span className="mono" style={{ fontSize: 11, color: 'var(--color-ink-5)' }}>
-              have trained with us
-            </span>
           </div>
         </div>
       </section>
@@ -503,7 +488,7 @@ export default async function CourseDetailPage({ params }: Props) {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.4fr)',
-                gap: 'clamp(3rem, 7vw, 7rem)',
+                gap: 'clamp(2.5rem, 5.5vw, 5rem)',
                 paddingTop: 40,
                 borderTop: '1px solid var(--color-line)',
               }}
@@ -791,12 +776,12 @@ export default async function CourseDetailPage({ params }: Props) {
                     <span
                       className="serif"
                       style={{
-                        fontSize: 'clamp(4rem, 8vw, 9rem)',
-                        letterSpacing: '-0.035em',
-                        lineHeight: 0.9,
+                        fontSize: 'clamp(3rem, 6vw, 6rem)',
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1,
                       }}
                     >
-                      {fmtPrice(displayPrice)}
+                      {fmtPrice(displayPrice, course.currency)}
                     </span>
                     {course.compare && saved > 0 && (
                       <div
@@ -815,7 +800,7 @@ export default async function CourseDetailPage({ params }: Props) {
                             fontSize: 14,
                           }}
                         >
-                          {fmtPrice(course.compare)}
+                          {fmtPrice(course.compare, course.currency)}
                         </span>
                         <span className="chip chip-accent">Save {saved}%</span>
                       </div>
@@ -827,8 +812,8 @@ export default async function CourseDetailPage({ params }: Props) {
                       className="serif"
                       style={{
                         fontSize: 'clamp(2.75rem, 5vw, 4.5rem)',
-                        letterSpacing: '-0.035em',
-                        lineHeight: 0.95,
+                        letterSpacing: '-0.02em',
+                        lineHeight: 1.03,
                       }}
                     >
                       Enquire now
@@ -851,14 +836,6 @@ export default async function CourseDetailPage({ params }: Props) {
                   }}
                 >
                   Limited-time price
-                </div>
-              )}
-              {showPrice && (
-                <div
-                  className="mono"
-                  style={{ fontSize: 12, color: 'var(--color-ink-4)', marginTop: 10 }}
-                >
-                  or {fmtPrice(Math.round(displayPrice / 12))}/mo · 0% interest · 12 months
                 </div>
               )}
               <div style={{ marginTop: 32, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -909,10 +886,8 @@ export default async function CourseDetailPage({ params }: Props) {
                   showPrice
                     ? [
                         'Live cohort seat · instructor-led sessions',
-                        'All labs, recordings & materials (12-month access)',
-                        'Exam voucher on certification tracks',
-                        'Pass guarantee or free retake',
-                        'Alumni community · 12 months',
+                        'Labs, recordings & materials included',
+                        'Certification-track guidance where applicable',
                         `${seatsLeft} seats currently left in the next cohort`,
                         'Corporate invoicing available',
                       ]
@@ -1015,10 +990,10 @@ export default async function CourseDetailPage({ params }: Props) {
               <div
                 className="serif italic"
                 style={{
-                  fontSize: 'clamp(3rem, 7vw, 7rem)',
-                  fontWeight: 400,
-                  lineHeight: 0.93,
-                  letterSpacing: '-0.035em',
+                  fontSize: 'clamp(2.5rem, 5.5vw, 5rem)',
+                  fontWeight: 540,
+                  lineHeight: 1.02,
+                  letterSpacing: '-0.02em',
                   color: 'var(--color-bg)',
                 }}
               >
@@ -1038,7 +1013,7 @@ export default async function CourseDetailPage({ params }: Props) {
                     className="btn btn-primary btn-lg"
                     style={{ justifyContent: 'center' }}
                   >
-                    Buy Now · {fmtPrice(displayPrice)} <ArrowIcon />
+                    Buy Now · {fmtPrice(displayPrice, course.currency)} <ArrowIcon />
                   </a>
                 ) : (
                   <Link href="/contact" className="btn btn-primary btn-lg" style={{ justifyContent: 'center' }}>

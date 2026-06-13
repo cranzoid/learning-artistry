@@ -23,8 +23,8 @@ return new class extends Migration
             // Pricing
             $table->decimal('price', 10, 2)->nullable();
             $table->decimal('discounted_price', 10, 2)->nullable();
-            $table->string('currency', 10)->default('INR');
-            $table->boolean('show_price')->default(true);
+            $table->string('currency', 10)->default('USD');
+            $table->boolean('show_price')->default(false);
 
             // Media
             $table->string('thumbnail')->nullable();

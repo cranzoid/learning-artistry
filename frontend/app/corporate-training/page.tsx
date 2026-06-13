@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import Eyebrow from '@/components/ui/Eyebrow';
 import SectionHead from '@/components/ui/SectionHead';
 import { ArrowIcon, CheckIcon } from '@/components/ui/icons';
+
+const CORPORATE_HERO_PHOTO =
+  'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1400&auto=format&fit=crop';
 
 export const metadata: Metadata = {
   title: 'Corporate Training — The Learning Artistry',
@@ -59,10 +63,10 @@ const APPROACH_STEPS = [
 ];
 
 const FORMATS = [
-  { k: 'Cohort program', s: '12–16 week structured track, live instruction, 20–40 seats.', ideal: 'Engineering teams, certification drives, onboarding programs.', size: '20–40 seats', price: 'From $89k' },
-  { k: 'Executive intensive', s: '1–2 week offsite. Small group. Senior leaders, high-intensity.', ideal: 'Leadership transitions, new-scope prep, director+ cohorts.', size: '8–16 seats', price: 'From $124k' },
-  { k: 'Custom bootcamp', s: '2–5 day immersive, on-site or hybrid. Labs on your stack.', ideal: 'Migration accelerators, new stack introductions, reorgs.', size: 'Up to 80 seats', price: 'From $46k' },
-  { k: 'Fractional academy', s: 'A standing program. We run it; you own the outcomes.', ideal: 'Fortune-500 with recurring capability needs across functions.', size: 'Unlimited', price: 'Annual retainer' },
+  { k: 'Cohort program', s: '12–16 week structured track, live instruction, 20–40 seats.', ideal: 'Engineering teams, certification drives, onboarding programs.', size: '20–40 seats', price: 'Priced per cohort' },
+  { k: 'Executive intensive', s: '1–2 week offsite. Small group. Senior leaders, high-intensity.', ideal: 'Leadership transitions, new-scope prep, director+ cohorts.', size: '8–16 seats', price: 'Priced per engagement' },
+  { k: 'Custom bootcamp', s: '2–5 day immersive, on-site or hybrid. Labs on your stack.', ideal: 'Migration accelerators, new stack introductions, reorgs.', size: 'Up to 80 seats', price: 'Priced per bootcamp' },
+  { k: 'Fractional academy', s: 'A standing program. We run it; you own the outcomes.', ideal: 'Enterprises with recurring capability needs across functions.', size: 'Unlimited', price: 'Annual retainer' },
 ];
 
 const ROI_ITEMS = [
@@ -96,7 +100,7 @@ export default function CorporateTrainingPage() {
               flexWrap: 'wrap',
             }}
           >
-            <span>§ For enterprise</span>
+            <span>For enterprise</span>
             <span>Custom training &amp; certification programs</span>
             <span>For teams that want practical, structured learning</span>
           </div>
@@ -113,10 +117,10 @@ export default function CorporateTrainingPage() {
               <h1
                 className="serif"
                 style={{
-                  fontWeight: 400,
-                  fontSize: 'clamp(3.75rem, 9.5vw, 9.75rem)',
-                  lineHeight: 0.92,
-                  letterSpacing: '-0.04em',
+                  fontWeight: 540,
+                  fontSize: 'clamp(2.75rem, 6.5vw, 5.75rem)',
+                  lineHeight: 1.02,
+                  letterSpacing: '-0.02em',
                   margin: 0,
                 }}
               >
@@ -172,9 +176,9 @@ export default function CorporateTrainingPage() {
                 <div
                   className="serif"
                   style={{
-                    fontSize: 'clamp(3rem, 5.5vw, 5.5rem)',
-                    letterSpacing: '-0.035em',
-                    lineHeight: 0.88,
+                    fontSize: 'clamp(2.25rem, 4vw, 3.5rem)',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1,
                   }}
                 >
                   {s.v}
@@ -205,6 +209,26 @@ export default function CorporateTrainingPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Hero banner */}
+          <div
+            className="media-frame"
+            style={{
+              position: 'relative',
+              marginTop: 'clamp(3rem, 5vw, 4.5rem)',
+              aspectRatio: '16 / 6',
+              borderRadius: 20,
+            }}
+          >
+            <Image
+              src={CORPORATE_HERO_PHOTO}
+              alt="A working session between a facilitator and a team"
+              fill
+              priority
+              sizes="(max-width: 1240px) 100vw, 1240px"
+              style={{ objectFit: 'cover' }}
+            />
           </div>
         </div>
       </section>
@@ -272,7 +296,7 @@ export default function CorporateTrainingPage() {
             <blockquote
               className="serif"
               style={{
-                fontWeight: 400,
+                fontWeight: 600,
                 fontSize: 'clamp(1.75rem, 3.4vw, 2.75rem)',
                 lineHeight: 1.15,
                 letterSpacing: '-0.02em',
@@ -742,7 +766,7 @@ export default function CorporateTrainingPage() {
                       style={{
                         fontSize: 'clamp(2rem, 3.4vw, 3rem)',
                         letterSpacing: '-0.025em',
-                        lineHeight: 0.9,
+                        lineHeight: 1,
                         color: 'var(--color-accent)',
                       }}
                     >
@@ -774,10 +798,10 @@ export default function CorporateTrainingPage() {
               <h2
                 className="serif"
                 style={{
-                  fontWeight: 400,
+                  fontWeight: 540,
                   fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
-                  lineHeight: 0.96,
-                  letterSpacing: '-0.03em',
+                  lineHeight: 1.04,
+                  letterSpacing: '-0.02em',
                   maxWidth: '18ch',
                   marginTop: 20,
                 }}
@@ -901,7 +925,7 @@ export default function CorporateTrainingPage() {
           align-items: center;
         }
         .roi-value {
-          font-size: clamp(4rem, 7vw, 6.5rem);
+          font-size: clamp(2.75rem, 5vw, 4.5rem);
           letter-spacing: -0.035em;
           line-height: 0.88;
         }

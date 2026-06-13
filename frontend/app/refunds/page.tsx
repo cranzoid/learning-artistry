@@ -67,7 +67,7 @@ const sections = [
 export default function RefundsPage() {
   return (
     <LegalPageShell
-      eyebrow="§ Refunds"
+      eyebrow="Refunds"
       title="Refunds"
       lead="This page outlines how refund, cancellation, rescheduling, and transfer requests are handled for purchases made through The Learning Artistry."
       effectiveDate="April 22, 2026"

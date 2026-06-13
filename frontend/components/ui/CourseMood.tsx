@@ -1,14 +1,14 @@
 import type { Course } from '@/types';
 
 export const CATEGORY_COLORS: Record<string, string> = {
-  cloud: '#4A3AFF',
-  dev: '#C24A2E',
-  pm: '#0E77D6',
-  quality: '#2E7D32',
-  data: '#7B3AED',
-  leadership: '#1A1A1A',
-  marketing: '#D4763B',
-  finance: '#1E6B55',
+  cloud: '#3E5497',
+  dev: '#9C4F2E',
+  pm: '#2F6B8F',
+  quality: '#3D7252',
+  data: '#5E4791',
+  leadership: '#44403A',
+  marketing: '#A87427',
+  finance: '#2F6E5B',
 };
 
 export type CourseMoodKind = 'grid' | 'rings' | 'bars';

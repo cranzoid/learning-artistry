@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Course } from '@/types';
 import { fmtPrice } from '@/lib/api';
 import { getCourseAccent } from '@/components/ui/CourseMood';
@@ -57,7 +58,7 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           {course.catLabel} · {course.duration} · {course.level}
         </span>
         <span className="cc-list-price serif">
-          {hasVisiblePrice ? fmtPrice(displayPrice) : 'Enquire now'}
+          {hasVisiblePrice ? fmtPrice(displayPrice, course.currency) : 'Enquire now'}
         </span>
         <span className="cc-list-arrow">
           <ArrowUpRight />
@@ -75,7 +76,7 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
             animation: cc-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
           }
           .cc-list:hover {
-            background: var(--color-bg-alt);
+            background: var(--color-surface);
             padding-inline: 16px;
           }
           .cc-list-code {
@@ -85,8 +86,8 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           }
           .cc-list-title {
             font-size: 20px;
-            letter-spacing: -0.015em;
-            line-height: 1.15;
+            letter-spacing: -0.012em;
+            line-height: 1.18;
             color: var(--color-ink);
             min-width: 0;
           }
@@ -95,8 +96,8 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
             color: var(--color-ink-4);
           }
           .cc-list-price {
-            font-size: 22px;
-            letter-spacing: -0.02em;
+            font-size: 20px;
+            letter-spacing: -0.015em;
             color: var(--color-ink);
           }
           .cc-list-arrow {
@@ -129,21 +130,39 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
     );
   }
 
-  // ── Default colored portrait card ─────────────────────────────────────────
+  // ── Grid variant — editorial cover card ───────────────────────────────────
   return (
     <Link
       href={`/courses/${course.slug}`}
       className="cc-port"
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      <div className="cc-port-panel" style={{ background: color }}>
-        <div className="cc-port-top">
-          <span className="mono cc-port-code">{code}</span>
-          <span className="mono cc-port-cat">{course.catLabel}</span>
+      {course.thumbnail ? (
+        <div className="cc-port-panel cc-port-photo">
+          <Image
+            src={course.thumbnail}
+            alt={titleLead}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            style={{ objectFit: 'cover' }}
+          />
+          <div className="cc-port-photo-shade" />
+          <div className="cc-port-top">
+            <span className="mono cc-port-code">{code}</span>
+            <span className="mono cc-port-cat">{course.catLabel}</span>
+          </div>
+          <h3 className="serif cc-port-title">{titleLead}</h3>
         </div>
-        <h3 className="serif cc-port-title">{titleLead}</h3>
-        {course.cert && <span className="mono cc-port-cert">{course.cert}</span>}
-      </div>
+      ) : (
+        <div className="cc-port-panel" style={{ background: color }}>
+          <div className="cc-port-top">
+            <span className="mono cc-port-code">{code}</span>
+            <span className="mono cc-port-cat">{course.catLabel}</span>
+          </div>
+          <h3 className="serif cc-port-title">{titleLead}</h3>
+          {course.cert && <span className="cc-port-cert">{course.cert}</span>}
+        </div>
+      )}
 
       <div className="cc-port-body">
         <p className="cc-port-short">{course.short}</p>
@@ -156,14 +175,15 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           <div className="cc-port-price">
             {hasVisiblePrice ? (
               <>
-                <span className="serif">{fmtPrice(displayPrice)}</span>
-                {course.compare && (
-                  <span className="mono cc-port-compare">{fmtPrice(course.compare)}</span>
+                <span className="serif">{fmtPrice(displayPrice, course.currency)}</span>
+                {course.compare && saved > 0 && (
+                  <span className="mono cc-port-compare">{fmtPrice(course.compare, course.currency)}</span>
                 )}
-                {saved > 0 && <span className="chip chip-accent cc-port-save">-{saved}%</span>}
               </>
             ) : (
-              <span className="serif">Enquire now</span>
+              <span className="cc-port-enquire">
+                Enquire <ArrowUpRight />
+              </span>
             )}
           </div>
         </div>
@@ -178,79 +198,82 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           border-radius: 16px;
           overflow: hidden;
           height: 100%;
+          box-shadow: var(--shadow-card);
           transition: border-color .3s, transform .4s cubic-bezier(0.16,1,0.3,1), box-shadow .4s cubic-bezier(0.16,1,0.3,1);
           animation: cc-enter 460ms cubic-bezier(0.16, 1, 0.3, 1) both;
         }
         .cc-port:hover {
-          border-color: var(--color-ink-5);
-          transform: translateY(-3px);
-          box-shadow: 0 24px 48px -28px rgba(10,10,10,0.22), 0 2px 6px rgba(10,10,10,0.04);
+          border-color: var(--color-line-2);
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-card-hover);
         }
         .cc-port-panel {
           position: relative;
           aspect-ratio: 4 / 3;
-          padding: 20px;
+          padding: 22px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           gap: 14px;
-          color: #fff;
+          color: #FBF9F4;
           isolation: isolate;
           overflow: hidden;
         }
-        .cc-port-panel::before,
-        .cc-port-panel::after {
+        .cc-port-panel:not(.cc-port-photo)::before {
           content: "";
           position: absolute;
           inset: 0;
           pointer-events: none;
           z-index: -1;
-        }
-        .cc-port-panel::before {
           background:
-            radial-gradient(120% 80% at 10% 0%, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 45%),
-            linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.30) 100%);
+            radial-gradient(130% 90% at 12% 0%, rgba(251,249,244,0.14) 0%, rgba(251,249,244,0) 50%),
+            linear-gradient(180deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.22) 100%);
         }
-        .cc-port-panel::after {
-          background:
-            radial-gradient(60% 60% at 90% 100%, rgba(0,0,0,0.32) 0%, rgba(0,0,0,0) 65%);
-          mix-blend-mode: multiply;
+        .cc-port-photo img {
+          z-index: -2;
+        }
+        .cc-port-photo-shade {
+          position: absolute;
+          inset: 0;
+          z-index: -1;
+          background: linear-gradient(180deg, rgba(23,20,16,0.25) 0%, rgba(23,20,16,0.05) 35%, rgba(23,20,16,0.62) 100%);
         }
         .cc-port-top {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
           gap: 12px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid rgba(251,249,244,0.28);
           font-size: 11px;
           line-height: 1.2;
-          opacity: 0.95;
         }
-        .cc-port-code { letter-spacing: 0.05em; }
+        .cc-port-code { letter-spacing: 0.05em; opacity: 0.9; }
         .cc-port-cat {
-          letter-spacing: 0.05em;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           opacity: 0.78;
           text-align: right;
         }
         .cc-port-title {
-          font-weight: 400;
-          font-size: clamp(22px, 2.2vw, 28px);
-          line-height: 1.08;
-          letter-spacing: -0.02em;
+          font-weight: 540;
+          font-size: clamp(21px, 2.1vw, 26px);
+          line-height: 1.12;
+          letter-spacing: -0.015em;
           margin: 0;
-          max-width: 16ch;
-          color: #fff;
+          max-width: 17ch;
+          color: #FBF9F4;
         }
         .cc-port-cert {
           align-self: flex-start;
           font-size: 10px;
-          letter-spacing: 0.06em;
+          font-weight: 600;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
-          padding: 4px 10px;
+          padding: 5px 11px;
           border-radius: 999px;
-          background: rgba(255,255,255,0.18);
-          border: 1px solid rgba(255,255,255,0.28);
-          backdrop-filter: blur(6px);
+          border: 1px solid rgba(251,249,244,0.35);
+          color: rgba(251,249,244,0.92);
         }
         .cc-port-body {
           padding: 20px 22px 22px;
@@ -262,7 +285,7 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
         .cc-port-short {
           font-size: 14px;
           color: var(--color-ink-3);
-          line-height: 1.5;
+          line-height: 1.55;
           margin: 0;
           display: -webkit-box;
           -webkit-line-clamp: 2;
@@ -292,8 +315,8 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           flex-wrap: wrap;
         }
         .cc-port-price .serif {
-          font-size: 22px;
-          letter-spacing: -0.02em;
+          font-size: 20px;
+          letter-spacing: -0.015em;
           color: var(--color-ink);
         }
         .cc-port-compare {
@@ -301,9 +324,13 @@ export default function CourseCard({ course, variant = 'grid', index = 0 }: Cour
           color: var(--color-ink-4);
           text-decoration: line-through;
         }
-        .cc-port-save {
-          font-size: 10px;
-          padding: 3px 8px;
+        .cc-port-enquire {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13.5px;
+          font-weight: 600;
+          color: var(--color-accent);
         }
         @keyframes cc-enter {
           from { opacity: 0; transform: translateY(14px); }

@@ -47,10 +47,10 @@ export default function LegalPageShell({
           <h1
             className="serif"
             style={{
-              fontWeight: 400,
-              fontSize: 'clamp(3rem, 8vw, 7rem)',
-              lineHeight: 0.94,
-              letterSpacing: '-0.04em',
+              fontWeight: 540,
+              fontSize: 'clamp(2.5rem, 6vw, 4.75rem)',
+              lineHeight: 1.03,
+              letterSpacing: '-0.02em',
               marginTop: 40,
               maxWidth: '14ch',
             }}

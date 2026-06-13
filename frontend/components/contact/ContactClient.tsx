@@ -98,28 +98,17 @@ export default function ContactClient() {
         }}
       >
         <div className="wrap">
-          <div
-            className="mono"
-            style={{
-              fontSize: 11,
-              paddingBottom: 20,
-              borderBottom: '1px solid var(--color-line)',
-              display: 'flex',
-              gap: 20,
-              color: 'var(--color-ink-4)',
-              flexWrap: 'wrap',
-            }}
-          >
-            <span>§ Contact</span>
-            <span>Mon–Fri · Business hours IST · Responses within 1 business day</span>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <span className="chip chip-accent">Contact</span>
+            <span className="chip chip-dot">Mon–Fri · IST · Replies within 1 business day</span>
           </div>
           <h1
             className="serif"
             style={{
-              fontWeight: 400,
-              fontSize: 'clamp(3.5rem, 8vw, 7rem)',
-              lineHeight: 0.95,
-              letterSpacing: '-0.035em',
+              fontWeight: 540,
+              fontSize: 'clamp(2.75rem, 6vw, 5rem)',
+              lineHeight: 1.03,
+              letterSpacing: '-0.02em',
               margin: '40px 0 24px',
             }}
           >
@@ -415,7 +404,7 @@ export default function ContactClient() {
                   className="eyebrow"
                   style={{ color: 'rgba(255,255,255,0.5)' }}
                 >
-                  § 04 · Consultation
+                  Consultation
                 </span>
                 <div
                   className="serif"

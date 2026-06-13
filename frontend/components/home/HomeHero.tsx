@@ -2,128 +2,110 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Course } from '@/types';
-import CourseMood, { getCourseAccent, getCourseMoodKind } from '@/components/ui/CourseMood';
 import { ArrowIcon, ArrowUpRightIcon } from '@/components/ui/icons';
 
 interface Props {
   featured: Course[];
 }
 
-function formatToday() {
-  return new Date().toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-}
+const HERO_PHOTO =
+  'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=1400&auto=format&fit=crop';
 
-const STATS = [
-  { value: 'Live', label: 'Guided cohorts and structured practice' },
-  { value: 'Small', label: 'Learning environments built for attention' },
-  { value: 'Team', label: 'Options for individual and company enrolment' },
+const PROOF = [
+  { value: 'Live cohorts', label: 'Instructor-led, with structured practice' },
+  { value: '20 seats', label: 'Small groups built for real attention' },
+  { value: 'Six tracks', label: 'Cloud, dev, PM, quality, data & marketing' },
 ];
 
 const FALLBACK_STAGE = {
-  title: 'AWS Solutions Architect',
-  catLabel: 'Cloud & IT',
-  cohortNum: 312,
-  color: '#4A3AFF',
+  title: 'Explore the current catalog',
+  catLabel: 'Programs',
+  meta: 'Live · instructor-led',
 };
 
 export default function HomeHero({ featured }: Props) {
-  const items = useMemo(() => featured.slice(0, 6), [featured]);
+  const items = useMemo(() => featured.slice(0, 5), [featured]);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     if (items.length < 2) return undefined;
     const id = window.setInterval(() => {
       setActive((current) => (current + 1) % items.length);
-    }, 4500);
+    }, 5000);
     return () => window.clearInterval(id);
   }, [items]);
 
   const current = items[active];
   const stageTitle = current ? current.title.split(' —')[0] : FALLBACK_STAGE.title;
-  const stageCat = current?.catLabel ?? FALLBACK_STAGE.catLabel;
-  const stageCohort = current?.cohorts ?? FALLBACK_STAGE.cohortNum;
-  const stageColor = current ? getCourseAccent(current) : FALLBACK_STAGE.color;
+  const stageMeta = current
+    ? [current.catLabel, current.duration, current.level].filter(Boolean).join(' · ') ||
+      FALLBACK_STAGE.meta
+    : FALLBACK_STAGE.meta;
 
   return (
-    <section className="hero-ed">
+    <section className="hero-e">
       <div className="wrap">
-        <div className="hero-ed-grid">
-          {/* Left column */}
-          <div className="hero-ed-left">
-            <div className="hero-ed-meta">
-              <span className="mono">TLA · Current Programs</span>
-              <span className="mono muted">{formatToday()}</span>
-            </div>
+        <div className="hero-e-grid">
+          {/* Left — copy */}
+          <div>
+            <span className="badge-soft">
+              <span className="ticker-dot" />
+              Cohorts enrolling now
+            </span>
 
-            <h1 className="hero-ed-title serif">
-              <span className="italic">Mastery</span>, taught
+            <h1 className="hero-e-title">
+              Professional skills,
               <br />
-              with the care
-              <br />
-              of a <span className="italic">studio</span>.
+              taught with <span className="italic">artistry</span>.
             </h1>
 
-            <p className="hero-ed-lede lead">
-              The Learning Artistry offers professional training and certification programs for
-              individuals and teams across cloud, development, project management, quality, data,
-              and leadership disciplines.
+            <p className="hero-e-lede">
+              Training and certification programs for individuals and teams — across
+              cloud, development, project management, quality, data, and marketing.
+              Practical, current, and built around the work you actually do.
             </p>
 
-            <div className="hero-ed-cta">
-              <Link href="/courses" className="btn btn-ink btn-lg">
-                For individuals <ArrowIcon />
+            <div className="hero-e-cta">
+              <Link href="/courses" className="btn btn-primary btn-lg">
+                Explore courses <ArrowIcon />
               </Link>
               <Link href="/corporate-training" className="btn btn-ghost btn-lg">
-                For teams <ArrowIcon />
+                Training for teams
               </Link>
             </div>
 
-            <div className="hero-ed-stats">
-              {STATS.map((item) => (
-                <div key={item.value} className="hero-ed-stat">
-                  <div className="serif hero-ed-stat-v">{item.value}</div>
-                  <div className="mono hero-ed-stat-l">{item.label}</div>
+            <div className="hero-e-proof">
+              {PROOF.map((item) => (
+                <div key={item.value}>
+                  <div className="hero-e-proof-v">{item.value}</div>
+                  <div className="hero-e-proof-l">{item.label}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Right column */}
-          <div className="hero-ed-right">
-            <div className="hero-ed-frame">
-              {/* Background mood illustration */}
-              <div className="absolute inset-0">
-                <CourseMood
-                  slug={current ? current.slug : 'hero-fallback'}
-                  color={stageColor}
-                  kind={current ? getCourseMoodKind(current.slug) : 'grid'}
-                />
-              </div>
-              {/* Colour tint overlay */}
-              <div
-                className="absolute inset-0"
-                style={{ background: stageColor, opacity: 0.08 }}
+          {/* Right — photography + spotlight card */}
+          <div className="hero-e-media">
+            <div className="hero-e-photo">
+              <Image
+                src={HERO_PHOTO}
+                alt="A live training session in progress"
+                fill
+                priority
+                sizes="(max-width: 960px) 100vw, 46vw"
+                style={{ objectFit: 'cover' }}
               />
-              <div className="hero-ed-ticker">
-                <span className="ticker-dot" />
-                <span className="mono">Current course spotlight</span>
-              </div>
+            </div>
 
-              <div className="hero-ed-now">
-                <div className="mono muted hero-ed-now-label">Now teaching</div>
-                <div className="serif hero-ed-now-title">{stageTitle}</div>
-                <div className="mono hero-ed-now-meta">
-                  {stageCat} · cohort #{stageCohort}
-                </div>
-              </div>
+            <div className="hero-e-card">
+              <span className="hero-e-card-label">Now enrolling</span>
+              <div className="hero-e-card-title">{stageTitle}</div>
+              <div className="hero-e-card-meta">{stageMeta}</div>
 
               {items.length > 1 && (
-                <div className="hero-ed-dots">
+                <div className="hero-e-dots">
                   {items.map((item, i) => (
                     <button
                       key={item.slug}
@@ -135,20 +117,17 @@ export default function HomeHero({ featured }: Props) {
                   ))}
                 </div>
               )}
-            </div>
 
-            {items.length > 0 && (
-              <div className="hero-ed-index">
-                {items.map((item, i) => (
-                  <Link key={item.slug} href={`/courses/${item.slug}`} className="hero-ed-index-row">
-                    <span className="mono muted">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="serif hero-ed-index-title">{item.title.split(' —')[0]}</span>
-                    <span className="mono hero-ed-index-dur">{item.duration}</span>
-                    <ArrowUpRightIcon size={12} />
-                  </Link>
-                ))}
-              </div>
-            )}
+              <Link
+                href={current ? `/courses/${current.slug}` : '/courses'}
+                className="hero-e-card-link"
+              >
+                <span style={{ flex: 1 }}>
+                  {current ? 'View this program' : 'View all programs'}
+                </span>
+                <ArrowUpRightIcon size={12} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>

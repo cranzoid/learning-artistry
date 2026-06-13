@@ -1,9 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import FounderPortrait from '@/components/about/FounderPortrait';
 import Eyebrow from '@/components/ui/Eyebrow';
 import SectionHead from '@/components/ui/SectionHead';
 import { ArrowIcon } from '@/components/ui/icons';
+
+const ABOUT_HERO_PHOTO =
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1600&auto=format&fit=crop';
 
 export const metadata: Metadata = {
   title: 'About — The Learning Artistry',
@@ -71,16 +75,16 @@ export default function AboutPage() {
               color: 'var(--color-ink-4)',
             }}
           >
-            <span>§ About</span>
+            <span>About</span>
             <span>Founder-led · New Delhi roots</span>
           </div>
           <h1
             className="serif"
             style={{
-              fontWeight: 400,
-              fontSize: 'clamp(3.5rem, 10vw, 10.5rem)',
-              lineHeight: 0.92,
-              letterSpacing: '-0.04em',
+              fontWeight: 540,
+              fontSize: 'clamp(2.75rem, 6.5vw, 5.5rem)',
+              lineHeight: 1.02,
+              letterSpacing: '-0.02em',
               marginTop: 40,
             }}
           >
@@ -93,6 +97,25 @@ export default function AboutPage() {
             clear communication, practical programs, and a learning experience that feels
             professional from the first conversation onward.
           </p>
+
+          <div
+            className="media-frame"
+            style={{
+              position: 'relative',
+              marginTop: 56,
+              aspectRatio: '16 / 7',
+              borderRadius: 20,
+            }}
+          >
+            <Image
+              src={ABOUT_HERO_PHOTO}
+              alt="A quiet, well-lit study space"
+              fill
+              priority
+              sizes="(max-width: 1240px) 100vw, 1240px"
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         </div>
       </section>
 
@@ -291,10 +314,10 @@ export default function AboutPage() {
           <h2
             className="serif"
             style={{
-              fontWeight: 400,
-              fontSize: 'clamp(3.5rem, 8vw, 7.5rem)',
-              lineHeight: 0.93,
-              letterSpacing: '-0.035em',
+              fontWeight: 540,
+              fontSize: 'clamp(2.5rem, 6vw, 4.75rem)',
+              lineHeight: 1.02,
+              letterSpacing: '-0.02em',
             }}
           >
             Explore the <em>programs</em>.

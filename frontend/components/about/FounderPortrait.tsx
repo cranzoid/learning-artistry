@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 const PORTRAIT_SRC = '/founders/bhawna-lal.jpg';
 
@@ -44,19 +45,25 @@ export default function FounderPortrait() {
   }
 
   return (
-    <img
-      src={PORTRAIT_SRC}
-      alt="Bhawna Lal, founder of The Learning Artistry"
-      onError={() => setShowFallback(true)}
+    <div
       style={{
+        position: 'relative',
         width: '100%',
-        height: '100%',
         aspectRatio: '4 / 5',
-        objectFit: 'cover',
         borderRadius: 16,
         border: '1px solid var(--color-line)',
         background: 'var(--color-bg-alt)',
+        overflow: 'hidden',
       }}
-    />
+    >
+      <Image
+        src={PORTRAIT_SRC}
+        alt="Bhawna Lal, founder of The Learning Artistry"
+        fill
+        sizes="(max-width: 900px) 100vw, 480px"
+        onError={() => setShowFallback(true)}
+        style={{ objectFit: 'cover' }}
+      />
+    </div>
   );
 }

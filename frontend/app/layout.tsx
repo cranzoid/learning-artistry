@@ -1,21 +1,20 @@
 import type { Metadata } from 'next';
-import { Instrument_Serif, Inter_Tight, Geist_Mono } from 'next/font/google';
+import { Fraunces, Inter, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
-const instrumentSerif = Instrument_Serif({
-  variable: '--font-instrument-serif',
+const fraunces = Fraunces({
+  variable: '--font-fraunces',
   subsets: ['latin'],
-  weight: ['400'],
   style: ['normal', 'italic'],
+  axes: ['opsz'],
   display: 'swap',
 });
 
-const interTight = Inter_Tight({
-  variable: '--font-inter-tight',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -67,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${interTight.variable} ${geistMono.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${geistMono.variable}`}
     >
       <body className="min-h-dvh flex flex-col bg-[var(--color-bg)] text-[var(--color-ink)] antialiased">
         <Navbar />

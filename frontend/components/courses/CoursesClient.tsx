@@ -100,29 +100,18 @@ export default function CoursesClient({
         }}
       >
         <div className="wrap">
-          <div
-            style={{
-              display: 'flex',
-              gap: 20,
-              paddingBottom: 20,
-              borderBottom: '1px solid var(--color-line)',
-              fontSize: 11,
-            }}
-          >
-            <span className="mono text-[var(--color-ink-4)]">§ Catalog</span>
-            <span className="mono text-[var(--color-ink-5)]">Spring · 2026</span>
-            {allCount > 0 && (
-              <span className="mono text-[var(--color-ink-5)]">{allCount} programs</span>
-            )}
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <span className="chip chip-accent">Course catalog</span>
+            {allCount > 0 && <span className="chip chip-dot">{allCount} programs enrolling</span>}
           </div>
 
           <h1
             className="serif"
             style={{
-              fontSize: 'clamp(3.5rem, 8vw, 6.5rem)',
-              fontWeight: 400,
-              lineHeight: 0.95,
-              letterSpacing: '-0.035em',
+              fontSize: 'clamp(3rem, 7vw, 5.5rem)',
+              fontWeight: 540,
+              lineHeight: 1.0,
+              letterSpacing: '-0.02em',
               marginTop: 32,
               maxWidth: '20ch',
             }}
@@ -329,22 +318,15 @@ export default function CoursesClient({
         }}
       >
         <div className="wrap">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'minmax(0,1fr) minmax(0,auto)',
-              gap: 48,
-              alignItems: 'center',
-            }}
-          >
+          <div className="cf-cta-grid">
             <div>
               <div
                 className="serif"
                 style={{
                   fontSize: 'clamp(2rem, 5vw, 4rem)',
-                  fontWeight: 400,
-                  lineHeight: 0.96,
-                  letterSpacing: '-0.03em',
+                  fontWeight: 540,
+                  lineHeight: 1.04,
+                  letterSpacing: '-0.02em',
                 }}
               >
                 Can&apos;t find what<br />
@@ -365,6 +347,21 @@ export default function CoursesClient({
           </div>
         </div>
       </section>
+
+      <style>{`
+        .cf-cta-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 32px;
+          align-items: center;
+        }
+        @media (min-width: 768px) {
+          .cf-cta-grid {
+            grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+            gap: 48px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

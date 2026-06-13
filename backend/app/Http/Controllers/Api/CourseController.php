@@ -19,7 +19,7 @@ class CourseController extends Controller
             ->with('category:id,name,slug')
             ->when($request->boolean('featured'), fn ($q) => $q->where('featured', true))
             ->when($request->filled('search'), function ($query) use ($request) {
-                $search = trim((string) $request->string('search'));
+                $search = addcslashes(trim((string) $request->string('search')), '%_\\');
 
                 $query->where(function ($query) use ($search) {
                     $query
@@ -41,7 +41,7 @@ class CourseController extends Controller
             ->when(! in_array($request->string('sort')->value(), ['price-asc', 'price-desc'], true), fn ($q) => $q
                 ->orderByDesc('featured')
                 ->latest('updated_at'))
-            ->paginate($request->integer('per_page', 12));
+            ->paginate(min(max($request->integer('per_page', 12), 1), 100));
 
         return CourseCardResource::collection($courses);
     }
